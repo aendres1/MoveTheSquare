@@ -28,9 +28,8 @@ public class GameView extends JPanel {
 		setPreferredSize(new Dimension((int) model.getWidth(), (int)model.getHeight()));
 		setBackground(MIDNIGHT_BLUE);
 
-		// djh2-KEC119-21: changed from 30 to 45
-		// djh2-YCPlaptop: change from 45 to 100
-		this.timer = new Timer(1000 / 100, new ActionListener() {
+		//aendres1: changed from 100 to 115
+		this.timer = new Timer(1000 / 115, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -53,11 +52,17 @@ public class GameView extends JPanel {
 		}
 		Square square = model.getSquare();
 		Point mouseLoc = getMousePosition();
+		
+		//aendres1: changed to prevent the square from moving outside the boundaries of the window
 		if (mouseLoc != null) {
-			controller.computeSquareMoveDirection(model, square, mouseLoc.getX(), mouseLoc.getY());
+			if(mouseLoc.getX() >= 0 && mouseLoc.getX() < model.getWidth() && mouseLoc.getY() >= 0 && mouseLoc.getY() < model.getHeight()) {
+				controller.computeSquareMoveDirection(model, square, mouseLoc.getX(), mouseLoc.getY());
+				controller.moveSquare(model, square);
+				repaint();
+			}
 		}
-		controller.moveSquare(model, square);
-		repaint();
+		
+		
 	}
 	
 	@Override
@@ -66,11 +71,13 @@ public class GameView extends JPanel {
 		
 		// djh2-KEC110-21: changed from GREEN to RED
 		// djh2-YCPlaptop: change from RED to YELLOW
-		g.setColor(Color.YELLOW);
+		//aendres1: changed from YELLOW to BLUE
+		g.setColor(Color.BLUE);
 
 		Square square = model.getSquare();
 		
-		g.fillRect((int) square.getX(), (int) square.getY(), (int) square.getWidth(), (int) square.getHeight());
+		//aendres1: changed from a square to a circle
+		g.fillOval((int) square.getX(), (int) square.getY(), (int) square.getWidth(), (int) square.getHeight());
 	}
 	
 	public static void main(String[] args) {
@@ -81,11 +88,12 @@ public class GameView extends JPanel {
 				model.setWidth(640.0);
 				model.setHeight(480.0);
 				
+				//aendres1: changed width from 40 to 20 and changed height from 40 to 20
 				Square square = new Square();
 				square.setX(300.0);
 				square.setY(220.0);
-				square.setWidth(40.0);
-				square.setHeight(40.0);
+				square.setWidth(20.0);
+				square.setHeight(20.0);
 				model.setSquare(square);
 				
 				GameController controller = new GameController();
